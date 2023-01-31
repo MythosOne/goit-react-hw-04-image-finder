@@ -21,5 +21,5 @@ export default ImageGallery;
 ImageGallery.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
-    })).isRequired,
+    })),
 };

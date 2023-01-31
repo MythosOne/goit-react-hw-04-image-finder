@@ -11,7 +11,7 @@ const ImageGalleryItem =({item})=> {
     };
 
     const { webformatURL } = item;
-    
+
     return (
         <li className= {styles.ImageGalleryItem}>
             <img
@@ -26,7 +26,10 @@ const ImageGalleryItem =({item})=> {
 };
 
 ImageGalleryItem.propTypes = {
-        item: PropTypes.object.isRequired,
-    };
+    item: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        webformatURL: PropTypes.string.isRequired,
+    }).isRequired,
+};
 
 export default ImageGalleryItem;

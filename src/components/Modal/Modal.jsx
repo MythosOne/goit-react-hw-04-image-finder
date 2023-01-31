@@ -39,8 +39,11 @@ const Modal = ({ onClose, image }) => {
 };
 
     Modal.propTypes = {
-        image: PropTypes.object,
-        onClose: PropTypes.func,
-}.isRequired;
+        image: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            webformatURL: PropTypes.string.isRequired,
+        }),
+        onClose: PropTypes.func.isRequired,
+};
 
 export default Modal;
