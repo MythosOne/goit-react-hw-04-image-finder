@@ -1,62 +1,57 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { apiService } from './Api/apiService';
+import apiService from './Api/apiService';
 import Searchbar from './Searchbar/Searchbar';
-import Notiflix from 'notiflix';
 import Loader from './Loader/Loader';
 import styles from './App.module.css';
 
-export class App extends Component {
+const App = () => {
 
-  state = {
-    inputData: '',
-    items: [],
-    page: 1,
-    totalHits: 0,
-    isLoading: false,
-    error: null,
+  const [inputData, setinputData] = useState('');
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalHits, settotalHits] = useState(0);
+  const [isLoading, setisLoading] = useState(false);
+
+  const handleSubmit = (inputData) => {
+    setinputData(inputData);
+    setPage(1);
+    setItems([]);
   };
 
-  handleSubmit = inputData => {
-    this.setState({ inputData, page: 1, items: [] });
-  };
+  useEffect(() => {
 
-  componentDidUpdate = (_, prevState) => {
-    if (this.state.inputData.trim() === '') {
-      Notiflix.Notify.failure('You cannot search by empty field, try again.');
+    if (inputData.trim() === '') {
       return;
-    };
-    
-    if (prevState.inputData !== this.state.inputData || prevState.page !== this.state.page) {
-      this.setState({isLoading: true});
-      apiService(this.state.inputData, this.state.page)
-        .then(images => {
-          this.setState(prevState => ({
-            items: [...prevState.items, ...images.hits],
-            totalHits: images.totalHits,
-          }));
-        })
-        .finally(() => this.setState({ isLoading: false }));
-    };
+    }
+
+    setisLoading(true);
+
+    apiService(inputData, page)
+      .then(images => {
+        setItems(items =>
+          [...items, ...images.hits]); 
+        settotalHits(images.totalHits)}
+        )
+      .finally(() => setisLoading(false));
+  }, [inputData, page]);
+
+  const oneNextPage = () => {
+    setPage(prevState => prevState + 1);
   };
 
-  oneNextPage = () => {
-    this.setState(prevState => ({page: prevState.page + 1}));
-  };
-
-    render() {
-      const { items, totalHits, isLoading } = this.state;
-      return (
-          <div className= {styles.App}>
-        <Searchbar onSubmit={this.handleSubmit} />
-            <ImageGallery items={items} />
-            {isLoading && <Loader />}
-            {totalHits > 12 && totalHits > items.length && 
-              (<Button onClick={this.oneNextPage} />)}
-          </div>
-      )
-  };
+  return (
+  <>
+    <div className={styles.App}>
+      <Searchbar onSubmit={handleSubmit} />
+      <ImageGallery items={items} />
+      {isLoading && <Loader />}
+      {totalHits > 12 && totalHits > items.length &&
+        (<Button onClick={oneNextPage} />)}
+    </div>
+  </>
+);
 };
 
 export default App;

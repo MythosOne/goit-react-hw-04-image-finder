@@ -1,28 +1,26 @@
 
 import styles from './Searchbar.module.css';
-import React, { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 
-class Searchbar extends Component {
-    state = {
-        inputData: '',
-    };
-    onChangeInput = e => {
-        this.setState({ inputData: e.currentTarget.value.toLowerCase() });
+const Searchbar = ({onSubmit}) => {
+    const [inputData, setinputData] = useState('');
+
+    const onChangeInput = e => {
+        setinputData(e.currentTarget.value.toLowerCase());
     };
 
-    handleSubmit = e => {
+    const handleSubmit = e => {
         e.preventDefault();
-        this.props.onSubmit(this.state.inputData);
-        this.setState({ inputData: '' });
+        
+        onSubmit(inputData);
+        setinputData('');
     };
 
-    render() {
-    const { inputData } = this.state.inputData;
         return (
             <header className={styles.Searchbar}>
-                <form className={styles.SearchForm} onSubmit={this.handleSubmit}>
+                <form className={styles.SearchForm} onSubmit={handleSubmit}>
                     <button type="submit" className={styles['SearchForm-button']}>
                         <ImSearch size={25} />
                     </button>
@@ -31,7 +29,7 @@ class Searchbar extends Component {
                         className={styles['SearchForm-input']}
                         name="inputData"
                         value={inputData}
-                        onChange={this.onChangeInput}
+                        onChange={onChangeInput}
                         type="text"
                         autoComplete="off"
                         autoFocus
@@ -40,7 +38,6 @@ class Searchbar extends Component {
                 </form>
             </header>
         );
-    };
 };
 
 export default Searchbar;

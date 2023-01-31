@@ -4,6 +4,7 @@ import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import styles from './ImageGallery.module.css';
 
 function ImageGallery({ items }) {
+    
     return (
         <>
             <ul className={styles.ImageGallery}>
